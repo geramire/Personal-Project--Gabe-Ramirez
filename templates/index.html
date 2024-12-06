@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>S&P 500 Chatbot</title>
+</head>
+<body>
+    <h1>S&P 500 Stock Chatbot</h1>
+    <form method="POST">
+        <label for="ticker">Enter Ticker:</label>
+        <input type="text" id="ticker" name="ticker" required>
+        <button type="submit">Get Data</button>
+    </form>
+
+    {% if result %}
+        {% if result.startswith("An error occurred") or result == "No data found for this ticker." %}
+            <p>{{ result }}</p>
+        {% else %}
+            <h2>Company Information:</h2>
+            <ul>
+                <li><strong>Sector:</strong> {{ sector }}</li>
+                <li><strong>Market Cap:</strong> {{ market_cap }}</li>
+                <li><strong>Business Summary:</strong> {{ summary }}</li>
+            </ul>
+
+            <h2>Stock Data:</h2>
+            {{ result | safe }}
+
+            {% if ticker %}
+                <h2>Price Chart:</h2>
+                <img src="/plot/{{ ticker }}" alt="Stock Chart">
+
+                <h2>Performance vs. S&P 500:</h2>
+                <img src="/plot_comparison/{{ ticker }}" alt="Comparison Chart">
+            {% endif %}
+        {% endif %}
+    {% endif %}
+</body>
+</html>
+
